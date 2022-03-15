@@ -1,0 +1,6 @@
+#test
+**/out
+.cproject
+.mxproject
+.project
+.settings/
