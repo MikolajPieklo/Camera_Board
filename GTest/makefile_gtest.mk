@@ -1,7 +1,29 @@
-CPPCFLAGS := -std=c++17 -Wall -I/usr/local/include/gtest/ -I/usr/local/include/gmock/ -IGTest/stubs/Inc -c
-CPPLFLAGS := -std=c++17 -pthread
-GTEST     := /usr/local/lib/libgtest.a \
-             /usr/local/lib/libgmock.a
+# Author: M Pieklo
+# Date: 11.04.2022
+# Project: UT for camera board.
+# License: Opensource
+
+ifeq ($(shell whoami), runner)
+$(info I am CI)
+CI_PATH := "x86_64-linux-gnu/"
+else
+$(info I am local PC)
+CI_PATH :=
+endif
+
+CPPCFLAGS := -std=c++17 \
+             -Wall \
+             -I/usr/local/include/gtest/ \
+             -I/usr/local/include/gmock/ \
+             -IGTest/stubs/Inc \
+             -c
+
+CPPLFLAGS := -std=c++17 \
+            -pthread
+
+
+GTEST     := /usr/local/lib/${CI_PATH}libgtest.a \
+             /usr/local/lib/${CI_PATH}libgmock.a
 
 CPP_OBJ_FILES := $(GTEST_DIR)/main.o \
                  $(GTEST_DIR)/gtest_timestamp_stubs.o \
@@ -19,3 +41,4 @@ $(GTEST_DIR)/camera_tst.o:
 
 $(GTEST_DIR)/gtest_timestamp_stubs.o:
 	$(CPPC) $(CPPCFLAGS) GTest/stubs/Src/gtest_timestamp_stubs.cpp -o $(GTEST_DIR)/gtest_timestamp_stubs.o
+	
