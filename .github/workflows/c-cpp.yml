@@ -17,5 +17,7 @@ jobs:
       run: ls -la
     - name: Install compiler
       run: sudo apt install gcc-arm-none-eabi
+    - name: Clone GTest
+      run: git clone https://github.com/google/googletest.git
     - name: make
       run: make
