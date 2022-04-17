@@ -27,4 +27,8 @@ jobs:
       run: make test
     - name: running UT...
       run: ./gtest_run.sh
+    - name: Install doxygen
+      run: sudo apt-get install doxygen
+    - name: building doc...
+      run: make doc
       

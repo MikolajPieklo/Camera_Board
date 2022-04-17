@@ -1,9 +1,10 @@
-/*
- * Camera.c
- *
- *  Created on: Aug 17, 2021
- *      Author: mkpk
- */
+/**
+* @file Camera.c
+* @brief Source file of camera.
+*
+* @author Mikolaj Pieklo
+* @date 17.04.2022
+*/
 
 #include "Camera.h"
 #include "CameraRegisters.h"
@@ -32,6 +33,13 @@
 
 ErrorStatus ov7725_init(void);
 
+/**
+ * @brief Initialize GPIO of camera.
+ *
+ * @return void
+ * @param void
+ * @todo
+ */
 void Camera_GPIO_Init(void)
 {
    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);
