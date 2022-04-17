@@ -39,7 +39,7 @@
 #include <ST7789.h>
 
 #include <platform.h>
-#include <Self_Test.h>
+#include <self_test.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

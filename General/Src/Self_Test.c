@@ -6,7 +6,7 @@
  */
 
 #include <stdio.h>
-#include <Self_Test.h>
+#include <self_test.h>
 #include <FSMC_hal.h>
 
 SelfTest_t Self_Test_Run()

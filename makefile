@@ -68,7 +68,6 @@ INC := \
 	-IHal/Inc
 
 all: make$(OUT_DIR) $(OUT_DIR)/libstm32f4xx.a $(OUT_DIR)/target.elf $(OUT_DIR)/target.hex
-test: test
 	
 make$(OUT_DIR):	
 	@if [ ! -e $(OUT_DIR) ]; then mkdir $(OUT_DIR); fi
@@ -278,4 +277,7 @@ reset:
 		-c "reset" \
 		-c "exit"
 		
-.PHONY: all make$(OUT_DIR) clean load $(OUT_DIR)/target.hex restart reset test $(OUT_DIR)/libstm32f4xx.a
+doc :
+	doxygen
+
+.PHONY: all make$(OUT_DIR) clean load $(OUT_DIR)/target.hex restart reset test $(OUT_DIR)/libstm32f4xx.a doc

@@ -4,3 +4,6 @@
 .mxproject
 .project
 .settings/
+doc/html/
+doc/latex/
+*.bak
