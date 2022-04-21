@@ -2,10 +2,12 @@ C_PROJECT_NAME_DEF := -DPROJECT_NAME="\"CamDev\""
 C_USER_NAME_DEF    := -DUSER_NAME="\"$(shell whoami)\""
 C_BUILD_DATE_DEF   := -DBUILD_DATE="\"$(shell date +%Y-%m-%d)\""
 C_BUILD_TIME_DEF   := -DBUILD_TIME="\"$(shell date +%H:%M:%S)\""
-CC_PATH           := $(shell which arm-none-eabi-gcc)
+CC_PATH            := $(shell which arm-none-eabi-gcc)
 CC_VERSION         := $(shell arm-none-eabi-gcc -dumpversion)
 CC                 := arm-none-eabi-gcc
-CC2HEX             := arm-none-eabi-objcopy
+CC_OBJCOPY         := arm-none-eabi-objcopy
+CC_OBJDUMP         := arm-none-eabi-objdump
+CC_AR              := arm-none-eabi-ar
 VERSION            := $(shell git describe --tags)
 COMMIT_ID          := $(shell git rev-parse HEAD)
 
