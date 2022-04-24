@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,18 +16,32 @@ jobs:
       run: ls -la
     - name: Install compiler...
       run: sudo apt install gcc-arm-none-eabi
+    - name: Install cppcheck...
+      run: sudo apt install cppcheck
+    - name: building app...
+      run: make
+      
+  UT:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
     - name: Cloning and building GTest...
       run: git clone https://github.com/google/googletest.git && cd googletest && mkdir build && cd build && cmake .. && sudo make install
-    - name: check
-      run: ls -la
-    - name: building app in progress...
-      run: make
-    - name: building UT in progress...
+    - name: Install gcovr
+      run: sudo apt install gcovr
+    - name: building UT...
       run: make test
     - name: running UT...
       run: ./gtest_run.sh
+      
+  doc:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
     - name: Install doxygen
       run: sudo apt-get install doxygen
-    - name: building doc...
+    - name: Building doc...
       run: make doc
-      
+    
