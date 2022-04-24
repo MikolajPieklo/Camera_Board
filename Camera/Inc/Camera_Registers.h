@@ -1,14 +1,13 @@
-/*
- * CameraRegisters.h
- *
- *  Created on: Nov 7, 2021
- *      Author: mkpk
- */
+/**
+* @file Camera_Registers.h
+* @brief Header of Camera_Registers file of the camera.
+*
+* @author Mikolaj Pieklo
+* @date 24.04.2022
+*/
 
 #ifndef INC_CAMERAREGISTERS_H_
 #define INC_CAMERAREGISTERS_H_
-
-#include <stdint.h>
 
 #define OV7725_R_COM2      0x09   /* Common Control 2 */
 #define OV7725_R_PID       0x0A   /* Product ID Number MSB (Read only = 0x77) */
