@@ -1,13 +1,14 @@
 /**
 * @file Camera.c
-* @brief Source file of camera.
+* @brief Source file of the camera.
 *
 * @author Mikolaj Pieklo
 * @date 17.04.2022
 */
 
-#include "Camera.h"
-#include "CameraRegisters.h"
+#include <Camera.h>
+#include <Camera_Registers.h>
+#include <Camera_Datatypes.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>
@@ -15,7 +16,6 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-
 #include <delay.h>
 
 #include <DCMI_hal.h>
@@ -31,15 +31,10 @@
 
 #define OV7670_WRITE_ADDR         0x42
 
+__attribute__((section(".EXTRAM")))uint16_t image[CAMERA_BUFFER];
+
 ErrorStatus ov7725_init(void);
 
-/**
- * @brief Initialize GPIO of camera.
- *
- * @return void
- * @param void
- * @todo
- */
 void Camera_GPIO_Init(void)
 {
    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);

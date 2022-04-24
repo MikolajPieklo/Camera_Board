@@ -53,8 +53,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define HARDWARE_VERSION               "V1.0.0"
-#define SOFTWARE_VERSION               "V0.2.0"
+#define HARDWARE_VERSION               "v1.0.0"
+#define SOFTWARE_VERSION               "v0.2.1"
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -62,6 +62,7 @@
 /* USER CODE BEGIN PV */
 extern void fault_test_by_unalign(void);
 extern void fault_test_by_div0(void);
+extern uint16_t image[230*320*2];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -131,11 +132,6 @@ int main(void)
    uint32_t i = 0;
    uint32_t j = 0;
    uint32_t offset = 0;
-   uint32_t *p = (uint32_t*)0x68000000;
-   for (i=0;i<230*320;i++)
-   {
-      *(p+i) = 0xF800F800;
-   }
 
    Camera_Init();
    Camera_Start();
@@ -149,7 +145,7 @@ int main(void)
 //      LL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
       for(i = 0; i < 57600/2; i++)
       {
-         uint32_t data = *(p+i+offset);
+         uint32_t data = *((uint32_t*)image+i+offset);
          uint16_t data1 = (uint16_t)(data >> 16);
          uint16_t data2 = (uint16_t)data;
          ST7789_SetPixel((uint16_t)data1);

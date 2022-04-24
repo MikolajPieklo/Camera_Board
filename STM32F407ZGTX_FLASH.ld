@@ -41,7 +41,7 @@ MEMORY
   CCMRAM    (xrw)    : ORIGIN = 0x10000000,   LENGTH = 64K
   RAM       (xrw)    : ORIGIN = 0x20000000,   LENGTH = 128K
   FLASH      (rx)    : ORIGIN = 0x8000000,    LENGTH = 1024K
-  ERAM      (xrw)    : ORIGIN = 0x68000000,   LENGTH = 8192K
+  EXT_RAM   (xrw)    : ORIGIN = 0x68000000,   LENGTH = 8192K
 }
 
 /* Sections */
@@ -169,6 +169,18 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
+
+  /* used by the startup to initialize the external ram */
+  _siextram = LOADADDR(.EXTRAM);
+  .EXTRAM :
+  {
+    . = ALIGN(4);
+    _sextram = .;       /* create a global symbol at ext_ram start */
+    *(.EXTRAM)          /* .EXTRAM sections */
+    *(.EXTRAM*)         /* .EXTRAM* sections */
+    . = ALIGN(4);
+    _eextram = .;       /* define a global symbol at ext_ram end */
+  } >EXT_RAM AT> FLASH
 
   /* Remove information from the compiler libraries */
   /DISCARD/ :

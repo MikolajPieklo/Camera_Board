@@ -6,9 +6,12 @@
  */
 
 #include <DMA_hal.h>
+#include <Camera_Datatypes.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_dma.h>
+
+extern uint16_t image[CAMERA_BUFFER];
 
 void DMA_Init(void)
 {
@@ -19,11 +22,10 @@ void DMA_Init(void)
 
    while (LL_DMA_IsEnabledStream(DMA2, LL_DMA_STREAM_1) != DISABLE){}
 
-   uint32_t *p = (uint32_t*)0x68000000;
    //DMA Stream
    DMA_InitStructure.Channel = LL_DMA_CHANNEL_1;
    DMA_InitStructure.PeriphOrM2MSrcAddress = (uint32_t)&DCMI->DR;
-   DMA_InitStructure.MemoryOrM2MDstAddress = (uint32_t)p;
+   DMA_InitStructure.MemoryOrM2MDstAddress = (uint32_t)image;
    DMA_InitStructure.Direction = LL_DMA_DIRECTION_PERIPH_TO_MEMORY;
    DMA_InitStructure.NbData = 38400; //320 * 240 * 2 = 153600 bytes / 4 = 38400
    DMA_InitStructure.PeriphOrM2MSrcIncMode = LL_DMA_PERIPH_NOINCREMENT;
