@@ -1,5 +1,5 @@
-#include <Lcd.h>
-#include <ST7789.h>
+#include <lcd.h>
+#include <st7789.h>
 
 void Lcd_Start(void)
 {

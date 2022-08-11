@@ -6,8 +6,8 @@
 * @date 24.04.2022
 */
 
-#ifndef INC_CAMERAREGISTERS_H_
-#define INC_CAMERAREGISTERS_H_
+#ifndef INC_CAMERA_REGISTERS_H_
+#define INC_CAMERA_REGISTERS_H_
 
 #define OV7725_R_COM2      0x09   /* Common Control 2 */
 #define OV7725_R_PID       0x0A   /* Product ID Number MSB (Read only = 0x77) */
@@ -201,4 +201,4 @@
 //   {OV7725_R_VOutSize,0x78},
 //};
 
-#endif /* INC_CAMERAREGISTERS_H_ */
+#endif /* INC_CAMERA_REGISTERS_H_ */

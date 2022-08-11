@@ -15,7 +15,7 @@ CPPCFLAGS := -std=c++17 \
              -Wall \
              -I/usr/local/include/gtest/ \
              -I/usr/local/include/gmock/ \
-             -IGTest/stubs/Inc \
+             -IGTest/stubs/inc \
              -c
 
 CPPLFLAGS := -std=c++17 \
@@ -40,5 +40,5 @@ $(GTEST_DIR)/camera_tst.o:
 	$(CPPC) $(CPPCFLAGS) GTest/camera_tst.cpp -o $(GTEST_DIR)/camera_tst.o
 
 $(GTEST_DIR)/gtest_timestamp_stubs.o:
-	$(CPPC) $(CPPCFLAGS) GTest/stubs/Src/gtest_timestamp_stubs.cpp -o $(GTEST_DIR)/gtest_timestamp_stubs.o
+	$(CPPC) $(CPPCFLAGS) GTest/stubs/src/gtest_timestamp_stubs.cpp -o $(GTEST_DIR)/gtest_timestamp_stubs.o
 	

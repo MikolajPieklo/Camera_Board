@@ -1,57 +1,23 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "spi.h"
-#include "usart.h"
-#include "gpio.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+/* System includes */
 #include <stdio.h>
 #include <string.h>
 
-#include <FSMC_hal.h>
+/* Project includes */
+#include <main.h>
+#include <spi.h>
+#include <usart.h>
+#include <gpio.h>
 
-#include "delay.h"
-#include "printf.h"
+#include <camera.h>
 #include <cm_backtrace.h>
-
-#include <Camera.h>
-#include <Lcd.h>
-#include <ST7789.h>
-
+#include <delay.h>
+#include <fsmc_hal.h>
+#include <lcd.h>
 #include <platform.h>
+#include <printf.h>
+#include <st7789.h>
 #include <self_test.h>
-/* USER CODE END Includes */
 
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 #define HARDWARE_VERSION               "v1.0.0"
 #define SOFTWARE_VERSION               "v0.2.1"
@@ -145,19 +111,19 @@ int main(void)
 //      LL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
       for(i = 0; i < 57600/2; i++)
       {
-         uint32_t data = *((uint32_t*)image+i+offset);
+         uint32_t data = *((uint32_t*)image + i + offset);
          uint16_t data1 = (uint16_t)(data >> 16);
          uint16_t data2 = (uint16_t)data;
          ST7789_SetPixel((uint16_t)data1);
          ST7789_SetPixel((uint16_t)data2);
-         j+=2;
+         j += 2;
          if (j == 240)
          {
             offset += 40;
-            j=0;
+            j = 0;
          }
       }
-      j=0;
+      j = 0;
       offset = 0;
    }
 }

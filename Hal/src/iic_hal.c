@@ -5,7 +5,7 @@
  *      Author: mkpk
  */
 
-#include <IIC_hal.h>
+#include <iic_hal.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>
