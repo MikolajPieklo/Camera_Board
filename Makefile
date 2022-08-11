@@ -56,16 +56,16 @@ CONST := -DUSE_FULL_LL_DRIVER -DHSE_VALUE=8000000 -DHSI_VALUE=16000000 -DLSE_VAL
 	-DHAL_SRAM_MODULE_ENABLED=1 $(CC_COMMON_MACRO)
 
 INC := \
-	-ICore/Inc/ \
-	-IDrivers/STM32F4xx_HAL_Driver/Inc/ \
+	-ICore/inc/ \
+	-IDrivers/STM32F4xx_HAL_Driver/inc/ \
 	-IDrivers/CMSIS/Device/ST/STM32F4xx/Include/ \
 	-IDrivers/CMSIS/Include/ \
-	-IGeneral/Inc/ \
-	-Icm_backtrace/Inc/ \
-	-Iembedded_log/Inc/ \
-	-ICamera/Inc/ \
-	-ILcd/Inc/ \
-	-IHal/Inc
+	-IGeneral/inc/ \
+	-Icm_backtrace/inc/ \
+	-Iembedded_log/inc/ \
+	-ICamera/inc/ \
+	-ILcd/inc/ \
+	-IHal/inc/
 
 all: make$(OUT_DIR) $(LIB_DIR)/libstm32f4xx.a $(LIB_DIR)/libhal.a $(OUT_DIR)/target.elf $(OUT_DIR)/target.hex
 	
@@ -81,117 +81,117 @@ make$(OUT_DIR):
 	@if [ ! -e $(LOG_DIR) ]; then mkdir $(LOG_DIR); fi
 	@if [ ! -e $(GTEST_DIR) ]; then mkdir $(GTEST_DIR); fi
 
-$(BIN_DIR)/main.o: Core/Src/main.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/main.c -o $(BIN_DIR)/main.o
+$(BIN_DIR)/main.o: Core/src/main.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/main.c -o $(BIN_DIR)/main.o
 	#                           		 			  $^              -o $@
 	
-$(BIN_DIR)/gpio.o: Core/Src/gpio.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/gpio.c -o $(BIN_DIR)/gpio.o
+$(BIN_DIR)/gpio.o: Core/src/gpio.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/gpio.c -o $(BIN_DIR)/gpio.o
 	
-$(BIN_DIR)/spi.o: Core/Src/spi.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/spi.c -o $(BIN_DIR)/spi.o
+$(BIN_DIR)/spi.o: Core/src/spi.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/spi.c -o $(BIN_DIR)/spi.o
 	
-$(BIN_DIR)/usart.o: Core/Src/usart.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/usart.c -o $(BIN_DIR)/usart.o	
+$(BIN_DIR)/usart.o: Core/src/usart.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/usart.c -o $(BIN_DIR)/usart.o	
 		
-$(BIN_DIR)/syscalls.o: Core/Src/syscalls.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/syscalls.c -o $(BIN_DIR)/syscalls.o	
+$(BIN_DIR)/syscalls.o: Core/src/syscalls.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/syscalls.c -o $(BIN_DIR)/syscalls.o	
 	
-$(BIN_DIR)/sysmem.o: Core/Src/sysmem.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/sysmem.c -o $(BIN_DIR)/sysmem.o	
+$(BIN_DIR)/sysmem.o: Core/src/sysmem.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/sysmem.c -o $(BIN_DIR)/sysmem.o	
 	
-$(BIN_DIR)/stm32f4xx_it.o: Core/Src/stm32f4xx_it.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/stm32f4xx_it.c -o $(BIN_DIR)/stm32f4xx_it.o	
+$(BIN_DIR)/stm32f4xx_it.o: Core/src/stm32f4xx_it.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/stm32f4xx_it.c -o $(BIN_DIR)/stm32f4xx_it.o	
 	
-$(BIN_DIR)/system_stm32f4xx.o: Core/Src/system_stm32f4xx.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/Src/system_stm32f4xx.c -o $(BIN_DIR)/system_stm32f4xx.o
+$(BIN_DIR)/system_stm32f4xx.o: Core/src/system_stm32f4xx.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/system_stm32f4xx.c -o $(BIN_DIR)/system_stm32f4xx.o
 	
 $(BIN_DIR)/startup_stm32f103c8tx.o: Core/Startup/startup_stm32f407zgtx.s
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_dma.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_dma.c
+$(DRIVER_DIR)/stm32f4xx_ll_dma.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_dma.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_exti.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.c
+$(DRIVER_DIR)/stm32f4xx_ll_exti.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_exti.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_gpio.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_gpio.c
+$(DRIVER_DIR)/stm32f4xx_ll_gpio.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_gpio.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_i2c.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_i2c.c
+$(DRIVER_DIR)/stm32f4xx_ll_i2c.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_i2c.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_pwr.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_pwr.c
+$(DRIVER_DIR)/stm32f4xx_ll_pwr.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_pwr.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_rcc.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_rcc.c
+$(DRIVER_DIR)/stm32f4xx_ll_rcc.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_rcc.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_spi.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_spi.c
+$(DRIVER_DIR)/stm32f4xx_ll_spi.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_spi.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_tim.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_tim.c
+$(DRIVER_DIR)/stm32f4xx_ll_tim.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_tim.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_usart.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_usart.c
+$(DRIVER_DIR)/stm32f4xx_ll_usart.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_usart.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_ll_utils.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_utils.c
+$(DRIVER_DIR)/stm32f4xx_ll_utils.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_ll_utils.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) ${INC} -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_dcmi.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_dcmi.c
+$(DRIVER_DIR)/stm32f4xx_dcmi.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_dcmi.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) ${INC} -o $@ $^
 	
-$(DRIVER_DIR)/stm32f4xx_fsmc.o: Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_fsmc.c
+$(DRIVER_DIR)/stm32f4xx_fsmc.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_fsmc.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(GENERAL_DIR)/delay.o: General/Src/delay.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/Src/delay.c -o $(GENERAL_DIR)/delay.o
+$(GENERAL_DIR)/delay.o: General/src/delay.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/delay.c -o $(GENERAL_DIR)/delay.o
 	
 $(GENERAL_DIR)/platform.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/Src/platform.c -o $(GENERAL_DIR)/platform.o
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/platform.c -o $(GENERAL_DIR)/platform.o
 	
-$(GENERAL_DIR)/printf.o: General/Src/printf.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/Src/printf.c -o $(GENERAL_DIR)/printf.o
+$(GENERAL_DIR)/printf.o: General/src/printf.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/printf.c -o $(GENERAL_DIR)/printf.o
 	
-$(GENERAL_DIR)/prj_version.o: General/Src/prj_version.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/Src/prj_version.c -o $(GENERAL_DIR)/prj_version.o
+$(GENERAL_DIR)/prj_version.o: General/src/prj_version.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/prj_version.c -o $(GENERAL_DIR)/prj_version.o
 	
-$(GENERAL_DIR)/Self_Test.o: General/Src/Self_Test.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/Src/Self_Test.c -o $(GENERAL_DIR)/Self_Test.o
+$(GENERAL_DIR)/self_test.o: General/src/self_test.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/self_test.c -o $(GENERAL_DIR)/self_test.o
 
-$(BIN_DIR)/DCMI_hal.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/Src/DCMI_hal.c -o $(BIN_DIR)/DCMI_hal.o
+$(BIN_DIR)/dcmi_hal.o:
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/src/dcmi_hal.c -o $(BIN_DIR)/dcmi_hal.o
 	
-$(BIN_DIR)/DMA_hal.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/Src/DMA_hal.c -o $(BIN_DIR)/DMA_hal.o
+$(BIN_DIR)/dma_hal.o:
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/src/dma_hal.c -o $(BIN_DIR)/dma_hal.o
 	
-$(BIN_DIR)/IIC_hal.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/Src/IIC_hal.c -o $(BIN_DIR)/IIC_hal.o
+$(BIN_DIR)/iic_hal.o:
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/src/iic_hal.c -o $(BIN_DIR)/iic_hal.o
 
-$(BIN_DIR)/FSMC_hal.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/Src/FSMC_hal.c -o $(BIN_DIR)/FSMC_hal.o
+$(BIN_DIR)/fsmc_hal.o:
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/src/fsmc_hal.c -o $(BIN_DIR)/fsmc_hal.o
 	
-$(BIN_DIR)/MCO_hal.o:
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/Src/MCO_hal.c -o $(BIN_DIR)/MCO_hal.o
+$(BIN_DIR)/mco_hal.o:
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Hal/src/mco_hal.c -o $(BIN_DIR)/mco_hal.o
 
-$(CM_BACKTRACE_DIR)/cm_backtrace.o: cm_backtrace/Src/cm_backtrace.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) cm_backtrace/Src/cm_backtrace.c -o $(CM_BACKTRACE_DIR)/cm_backtrace.o
+$(CM_BACKTRACE_DIR)/cm_backtrace.o: cm_backtrace/src/cm_backtrace.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) cm_backtrace/src/cm_backtrace.c -o $(CM_BACKTRACE_DIR)/cm_backtrace.o
 	
-$(CM_BACKTRACE_DIR)/fault_test.o: cm_backtrace/Src/fault_test.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) cm_backtrace/Src/fault_test.c -o $(CM_BACKTRACE_DIR)/fault_test.o
+$(CM_BACKTRACE_DIR)/fault_test.o: cm_backtrace/src/fault_test.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) cm_backtrace/src/fault_test.c -o $(CM_BACKTRACE_DIR)/fault_test.o
 
-$(LOG_DIR)/log.o: embedded_log/Src/log.c 
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) embedded_log/Src/log.c -o $(LOG_DIR)/log.o
+$(LOG_DIR)/log.o: embedded_log/src/log.c 
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) embedded_log/src/log.c -o $(LOG_DIR)/log.o
 	
-$(CAMERA_DIR)/Camera.o: Camera/Src/Camera.c Camera/Inc/Camera.h
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Camera/Src/Camera.c -o $(CAMERA_DIR)/Camera.o
+$(CAMERA_DIR)/camera.o: Camera/src/camera.c Camera/inc/camera.h
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Camera/src/camera.c -o $(CAMERA_DIR)/camera.o
 	
-$(LCD_DIR)/Lcd.o: Lcd/Src/Lcd.c Lcd/Inc/Lcd.h
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/Src/Lcd.c -o $(LCD_DIR)/Lcd.o
+$(LCD_DIR)/lcd.o: Lcd/src/lcd.c Lcd/inc/lcd.h
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/src/lcd.c -o $(LCD_DIR)/lcd.o
 
-$(LCD_DIR)/ST7789.o: Lcd/Src/ST7789.c Lcd/Inc/ST7789.h
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/Src/ST7789.c -o $(LCD_DIR)/ST7789.o
+$(LCD_DIR)/st7789.o: Lcd/src/st7789.c Lcd/inc/st7789.h
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/src/st7789.c -o $(LCD_DIR)/st7789.o
 
 LIB_FILES_STM32F4 := \
 	$(DRIVER_DIR)/stm32f4xx_ll_dma.o \
@@ -208,11 +208,11 @@ LIB_FILES_STM32F4 := \
 	$(DRIVER_DIR)/stm32f4xx_fsmc.o 
 
 LIB_FILES_HAL := \
-	$(BIN_DIR)/DCMI_hal.o \
-	$(BIN_DIR)/DMA_hal.o \
-	$(BIN_DIR)/IIC_hal.o \
-	$(BIN_DIR)/FSMC_hal.o \
-	$(BIN_DIR)/MCO_hal.o 
+	$(BIN_DIR)/dcmi_hal.o \
+	$(BIN_DIR)/dma_hal.o \
+	$(BIN_DIR)/iic_hal.o \
+	$(BIN_DIR)/fsmc_hal.o \
+	$(BIN_DIR)/mco_hal.o 
 	
 $(LIB_DIR)/libstm32f4xx.a: $(LIB_FILES_STM32F4)
 	@echo "$(ccblue)\nGenerating libstm32f4xx.a$(ccend)"
@@ -238,11 +238,11 @@ $(OUT_DIR)/target.elf: \
 	$(GENERAL_DIR)/printf.o \
 	$(GENERAL_DIR)/platform.o \
 	$(GENERAL_DIR)/prj_version.o \
-	$(GENERAL_DIR)/Self_Test.o \
+	$(GENERAL_DIR)/self_test.o \
 	$(LOG_DIR)/log.o \
-	$(CAMERA_DIR)/Camera.o \
-	$(LCD_DIR)/Lcd.o \
-	$(LCD_DIR)/ST7789.o \
+	$(CAMERA_DIR)/camera.o \
+	$(LCD_DIR)/lcd.o \
+	$(LCD_DIR)/st7789.o \
 	$(LIB_DIR)/libhal.a \
 	$(LIB_DIR)/libstm32f4xx.a
 		@echo "$(ccblue)\nLinking$(ccend)"

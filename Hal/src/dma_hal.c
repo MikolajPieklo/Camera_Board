@@ -5,7 +5,7 @@
  *      Author: mkpk
  */
 
-#include <DMA_hal.h>
+#include <dma_hal.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_dma.h>

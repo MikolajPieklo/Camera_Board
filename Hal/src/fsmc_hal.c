@@ -5,14 +5,15 @@
  *      Author: mkpk
  */
 
-#include <FSMC_hal.h>
+#include <string.h>
+
+#include <fsmc_hal.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_fsmc.h>
 #include <stm32f4xx_ll_gpio.h>
 #include <stm32f4xx_ll_rcc.h>
 
-#include <string.h>
 #include <delay.h>
 
 #define Bank1_SRAM3_ADDR    ((uint32_t)(0x68000000))

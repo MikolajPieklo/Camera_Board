@@ -5,8 +5,8 @@
  *      Author: mkpk
  */
 
-#ifndef INC_CAMERAREGISTERS_H_
-#define INC_CAMERAREGISTERS_H_
+#ifndef INC_CAMERA_REGISTERS_H_
+#define INC_CAMERA_REGISTERS_H_
 
 #include <stdint.h>
 
@@ -202,4 +202,4 @@
 //   {OV7725_R_VOutSize,0x78},
 //};
 
-#endif /* INC_CAMERAREGISTERS_H_ */
+#endif /* INC_CAMERA_REGISTERS_H_ */

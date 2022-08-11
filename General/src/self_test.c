@@ -7,7 +7,7 @@
 
 #include <stdio.h>
 #include <self_test.h>
-#include <FSMC_hal.h>
+#include <fsmc_hal.h>
 
 SelfTest_t Self_Test_Run()
 {

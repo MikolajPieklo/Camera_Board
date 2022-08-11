@@ -19,13 +19,11 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
-#include "stm32f4xx_it.h"
 #include <stdbool.h>
-#include <Camera.h>
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
-/* USER CODE END Includes */
+
+#include <camera.h>
+#include <main.h>
+#include <stm32f4xx_it.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
