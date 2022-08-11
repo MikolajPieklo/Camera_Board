@@ -6,22 +6,22 @@
 * @date 17.04.2022
 */
 
-#include <Camera.h>
-#include <Camera_Registers.h>
-#include <Camera_Datatypes.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>
 #include <stm32f4xx_ll_rcc.h>
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <delay.h>
+#include <camera.h>
+#include <camera_datatypes.h>
+#include <camera_registers.h>
 
-#include <DCMI_hal.h>
-#include <DMA_hal.h>
-#include <IIC_hal.h>
-#include <MCO_hal.h>
+#include <delay.h>
+#include <dcmi_hal.h>
+#include <dma_hal.h>
+#include <iic_hal.h>
+#include <mco_hal.h>
 
 #define CAMERA_RESET_PIN          LL_GPIO_PIN_7
 #define CAMERA_RESET_GPIO_Port    GPIOA

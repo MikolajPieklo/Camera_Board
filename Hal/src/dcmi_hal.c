@@ -4,8 +4,7 @@
  *  Created on: Mar 30, 2022
  *      Author: mkpk
  */
-
-#include <DCMI_hal.h>
+#include <dcmi_hal.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>

@@ -1,13 +1,15 @@
-#include <ST7789.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include <st7789.h>
 
 #include <stm32f4xx_ll_bus.h>
 #include <stm32f4xx_ll_gpio.h>
 #include <stm32f4xx_ll_spi.h>
 
 #include <delay.h>
-#include <Font_36.h>
-#include <stdlib.h>
-#include <string.h>
+#include <font_36.h>
+
 
 
 typedef struct LCD_Tag
