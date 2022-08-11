@@ -17,11 +17,11 @@
 #include <camera_datatypes.h>
 #include <camera_registers.h>
 
-#include <delay.h>
 #include <dcmi_hal.h>
 #include <dma_hal.h>
 #include <iic_hal.h>
 #include <mco_hal.h>
+#include <timestamp.h>
 
 #define CAMERA_RESET_PIN          LL_GPIO_PIN_7
 #define CAMERA_RESET_GPIO_Port    GPIOA

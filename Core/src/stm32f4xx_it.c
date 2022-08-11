@@ -58,7 +58,6 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-   extern volatile uint32_t SysTickValue;
    extern volatile bool CameraEndTransfer;
    extern volatile uint32_t VSyncCnt;
    extern volatile uint32_t LineCnt;
@@ -191,7 +190,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-   SysTickValue++;
+
   /* USER CODE END SysTick_IRQn 0 */
 
   /* USER CODE BEGIN SysTick_IRQn 1 */
