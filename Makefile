@@ -145,8 +145,8 @@ $(DRIVER_DIR)/stm32f4xx_dcmi.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_dcmi.
 $(DRIVER_DIR)/stm32f4xx_fsmc.o: Drivers/STM32F4xx_HAL_Driver/src/stm32f4xx_fsmc.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) -o $@ $^
 	
-$(GENERAL_DIR)/delay.o: General/src/delay.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/delay.c -o $(GENERAL_DIR)/delay.o
+$(GENERAL_DIR)/timestamp.o: General/src/timestamp.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/timestamp.c -o $(GENERAL_DIR)/timestamp.o
 	
 $(GENERAL_DIR)/platform.o:
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/platform.c -o $(GENERAL_DIR)/platform.o
@@ -234,7 +234,7 @@ $(OUT_DIR)/target.elf: \
 	$(BIN_DIR)/main.o \
 	$(CM_BACKTRACE_DIR)/cm_backtrace.o \
 	$(CM_BACKTRACE_DIR)/fault_test.o \
-	$(GENERAL_DIR)/delay.o \
+	$(GENERAL_DIR)/timestamp.o \
 	$(GENERAL_DIR)/printf.o \
 	$(GENERAL_DIR)/platform.o \
 	$(GENERAL_DIR)/prj_version.o \

@@ -10,7 +10,7 @@
 
 #include <camera.h>
 #include <cm_backtrace.h>
-#include <delay.h>
+#include <timestamp.h>
 #include <fsmc_hal.h>
 #include <lcd.h>
 #include <platform.h>
@@ -18,70 +18,33 @@
 #include <st7789.h>
 #include <self_test.h>
 
-/* USER CODE BEGIN PM */
 #define HARDWARE_VERSION               "v1.0.0"
 #define SOFTWARE_VERSION               "v0.2.1"
-/* USER CODE END PM */
 
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
 extern void fault_test_by_unalign(void);
 extern void fault_test_by_div0(void);
 extern uint16_t image[230*320*2];
-/* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
 volatile bool CameraEndTransfer = false;
 volatile uint32_t VSyncCnt = 0;
 volatile uint32_t LineCnt = 0;
 volatile uint32_t FrameCnt = 0;
 
-/* USER CODE END 0 */
-
-/**
-  * @brief  The application entry point.
-  * @retval int
-  */
 int main(void)
 {
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
-
-/* MCU Configuration--------------------------------------------------------*/
-
-/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
    LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
    LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-/* System interrupt init*/
-
-/* USER CODE BEGIN Init */
-
-/* USER CODE END Init */
-
-/* Configure the system clock */
    SystemClock_Config();
 
-/* USER CODE BEGIN SysInit */
-
-/* USER CODE END SysInit */
-
-/* Initialize all configured peripherals */
    MX_GPIO_Init();
    MX_USART1_UART_Init();
    MX_SPI1_Init();
+   TS_Init_ms();
    LL_SYSTICK_EnableIT();
    SRAM_FSMC_Init();
 
@@ -107,8 +70,6 @@ int main(void)
 
    while (1)
    {
-//      TS_Delay_ms(100);
-//      LL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
       for(i = 0; i < 57600/2; i++)
       {
          uint32_t data = *((uint32_t*)image + i + offset);
