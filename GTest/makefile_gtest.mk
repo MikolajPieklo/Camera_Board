@@ -3,14 +3,6 @@
 # Project: UT for camera board.
 # License: Opensource
 
-ifeq ($(shell whoami), runner)
-$(info I am CI)
-CI_PATH := "x86_64-linux-gnu/"
-else
-$(info I am local PC)
-CI_PATH :=
-endif
-
 CPPCFLAGS := -std=c++17 \
              -Wall \
              -I/usr/local/include/gtest/ \
