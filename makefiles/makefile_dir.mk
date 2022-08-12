@@ -9,4 +9,5 @@ GENERAL_DIR      := $(OUT_DIR)/General
 LCD_DIR          := $(OUT_DIR)/Lcd
 LOG_DIR          := $(OUT_DIR)/embedded_log
 GTEST_DIR        := $(OUT_DIR)/GTest
+OS_DIR           := $(OUT_DIR)/OS
 
