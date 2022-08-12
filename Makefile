@@ -1,6 +1,6 @@
 # Author: M Pieklo
 # Date: 11.04.2022
-# Project: Camera_board.
+# Project: CameraBoard.
 # License: Opensource
 
 include makefiles/makefile_colors.mk
@@ -14,15 +14,16 @@ GC   := -Wl,--gc-sections     # Link for code size
 DEBUGINFO := -DDEBUG -g3
 
 # Use newlib.
-USE_NOHOST   :=--specs=nosys.specs
+USE_NOSYS    :=--specs=nosys.specs
 USE_NANO     :=--specs=nano.specs
-USE_SEMIHOST :=--specs=rdimon.specs
+USE_RDIMON   :=--specs=rdimon.specs
 
 CFLAGS := \
 	-c \
 	-mcpu=$(MACH) \
 	-mthumb \
-	-mfloat-abi=soft \
+	-mfloat-abi=hard \
+	-mfpu=fpv4-sp-d16 \
 	-std=gnu11 \
 	-O0 \
 	-DSTM32F407xx \
@@ -39,7 +40,8 @@ CFLAGS := \
 LDFLAGS := \
 	-mcpu=$(MACH) \
 	-mthumb \
-	-mfloat-abi=soft \
+	-mfloat-abi=hard \
+	-mfpu=fpv4-sp-d16 \
 	-T"STM32F407ZGTX_FLASH.ld" \
 	$(MAP) \
 	$(GC) \
