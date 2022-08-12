@@ -15,7 +15,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "stm32f4xx.h"
+#include <stm32f4xx.h>
 
 void Project_Info_Print(void);
 
