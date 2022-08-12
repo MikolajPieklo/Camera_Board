@@ -8,13 +8,13 @@
 #include <platform.h>
 
 #include <stdint.h>
+
 #include <g_common_macros.h>
 
 void Platform_Read_Device_ID(void)
 {
    uint32_t *p = (uint32_t*)0x1FFF7A10;
    UNUSED(p);
-
 }
 
 void Platform_Read_Flash_Size(void)

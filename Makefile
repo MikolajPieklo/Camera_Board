@@ -161,8 +161,8 @@ $(GENERAL_DIR)/platform.o:
 $(GENERAL_DIR)/printf.o: General/src/printf.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/printf.c -o $(GENERAL_DIR)/printf.o
 	
-$(GENERAL_DIR)/prj_version.o: General/src/prj_version.c
-	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/prj_version.c -o $(GENERAL_DIR)/prj_version.o
+$(GENERAL_DIR)/project_info.o: General/src/project_info.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/project_info.c -o $(GENERAL_DIR)/project_info.o
 	
 $(GENERAL_DIR)/self_test.o: General/src/self_test.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) General/src/self_test.c -o $(GENERAL_DIR)/self_test.o
@@ -271,7 +271,7 @@ $(OUT_DIR)/target.elf: \
 	$(GENERAL_DIR)/timestamp.o \
 	$(GENERAL_DIR)/printf.o \
 	$(GENERAL_DIR)/platform.o \
-	$(GENERAL_DIR)/prj_version.o \
+	$(GENERAL_DIR)/project_info.o \
 	$(GENERAL_DIR)/self_test.o \
 	$(LOG_DIR)/log.o \
 	$(CAMERA_DIR)/camera.o \

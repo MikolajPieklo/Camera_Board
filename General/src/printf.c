@@ -3,19 +3,20 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "stm32f4xx_ll_usart.h"
-#include "prj_version.h"
-#include "prj_version_cfg.h"
+#include <stm32f4xx_ll_usart.h>
+
+#include <project_info.h>
+#include <project_info_cfg.h>
 
 void Project_Info_Print(void)
 {
-   printf("%s\n", Ver_Get_Separator());
-   printf("Project Name: %s\n", Ver_Get_Project_Name());
-   printf("Build Date:   %s\n", Ver_Get_Build_Date());
-   printf("Build Time:   %s\n", Ver_Get_Build_Time());
-   printf("Build ID:     %s\n", Ver_Get_Version_Name());
-   printf("User Name:    %s\n", Ver_Get_User_Name());
-   printf("%s\n", Ver_Get_Separator());
+   printf("%s\n",               Get_Separator());
+   printf("Project Name: %s\n", Get_Project_Name());
+   printf("Build Date:   %s\n", Get_Build_Date());
+   printf("Build Time:   %s\n", Get_Build_Time());
+   printf("Build ID:     %s\n", Get_Version_Name());
+   printf("User Name:    %s\n", Get_User_Name());
+   printf("%s\n",               Get_Separator());
 }
 
 void USART_Printf(USART_TypeDef *USARTx,const uint8_t* text, bool newline)

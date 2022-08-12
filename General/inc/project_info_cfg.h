@@ -1,5 +1,5 @@
-#ifndef GENERAL_INC_PRJ_VERSION_CFG_H
-#define GENERAL_INC_PRJ_VERSION_CFG_H
+#ifndef PROJECT_INFO_CFG_H
+#define PROJECT_INFO_CFG_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,7 +46,7 @@ extern "C" {
  *
  * Description: information about build user
  * Format     : String
- * Example    : "jzf80q"
+ * Example    : "mkpk"
  */
 #ifdef USER_NAME
 #define INFO_USER_NAME    { USER_NAME }
@@ -91,7 +91,7 @@ extern "C" {
  *
  * Description: build variant name
  * Format     : String
- * Example    : test_max
+ * Example    : cb_max
  */
 #ifdef VARIANT_NAME
 #define INFO_VARIANT_NAME    { VARIANT_NAME }
@@ -126,4 +126,4 @@ extern "C" {
 #endif
 
 /*===========================================================================*/
-#endif /* GENERAL_INC_PRJ_VERSION_CFG_H */
+#endif /* PROJECT_INFO_CFG_H */
