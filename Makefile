@@ -11,7 +11,7 @@ NAME := $(OUT_DIR)/TARGET
 MACH := cortex-m4
 MAP  := -Wl,-Map=$(NAME).map  # Create map file
 GC   := -Wl,--gc-sections     # Link for code size
-DEBUGINFO := -DDEBUG -g3
+DEBUGINFO := #-DDEBUG -g3
 
 # Use newlib.
 USE_NOSYS    :=--specs=nosys.specs
@@ -60,14 +60,18 @@ CONST := -DUSE_FULL_LL_DRIVER -DHSE_VALUE=8000000 -DHSI_VALUE=16000000 -DLSE_VAL
 INC := \
 	-ICore/inc/ \
 	-IDrivers/STM32F4xx_HAL_Driver/inc/ \
-	-IDrivers/CMSIS/Device/ST/STM32F4xx/Include/ \
+	-IDrivers/CMSIS/Device/ST/STM32F4xx/inc/ \
 	-IDrivers/CMSIS/Include/ \
 	-IGeneral/inc/ \
 	-Icm_backtrace/inc/ \
 	-Iembedded_log/inc/ \
 	-ICamera/inc/ \
 	-ILcd/inc/ \
-	-IHal/inc/
+	-IHal/inc/ \
+	-IOS/ \
+	-IOS/inc/ \
+	-IOS/portable/GCC/ARM_CM4F/ \
+	-IOS/CMSIS_RTOS_V2/
 
 all: make$(OUT_DIR) $(LIB_DIR)/libstm32f4xx.a $(LIB_DIR)/libhal.a $(OUT_DIR)/target.elf $(OUT_DIR)/target.hex
 	
@@ -82,6 +86,7 @@ make$(OUT_DIR):
 	@if [ ! -e $(LCD_DIR) ]; then mkdir $(LCD_DIR); fi
 	@if [ ! -e $(LOG_DIR) ]; then mkdir $(LOG_DIR); fi
 	@if [ ! -e $(GTEST_DIR) ]; then mkdir $(GTEST_DIR); fi
+	@if [ ! -e $(OS_DIR) ]; then mkdir $(OS_DIR); fi
 
 $(BIN_DIR)/main.o: Core/src/main.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Core/src/main.c -o $(BIN_DIR)/main.o
@@ -194,6 +199,33 @@ $(LCD_DIR)/lcd.o: Lcd/src/lcd.c Lcd/inc/lcd.h
 
 $(LCD_DIR)/st7789.o: Lcd/src/st7789.c Lcd/inc/st7789.h
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/src/st7789.c -o $(LCD_DIR)/st7789.o
+	
+$(OS_DIR)/tasks.o: OS/src/tasks.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/src/tasks.c -o $(OS_DIR)/tasks.o
+	
+$(OS_DIR)/timers.o: OS/src/timers.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/src/timers.c -o $(OS_DIR)/timers.o
+	
+$(OS_DIR)/list.o: OS/src/list.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/src/list.c -o $(OS_DIR)/list.o
+	
+$(OS_DIR)/queue.o: OS/src/queue.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/src/queue.c -o $(OS_DIR)/queue.o
+	
+$(OS_DIR)/heap_4.o: OS/portable/MemMang/heap_4.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/portable/MemMang/heap_4.c -o $(OS_DIR)/heap_4.o
+	
+$(OS_DIR)/port.o: OS/portable/GCC/ARM_CM4F/port.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/portable/GCC/ARM_CM4F/port.c -o $(OS_DIR)/port.o
+	
+$(OS_DIR)/cmsis_os2.o: OS/CMSIS_RTOS_V2/cmsis_os2.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/CMSIS_RTOS_V2/cmsis_os2.c -o $(OS_DIR)/cmsis_os2.o
+	
+$(OS_DIR)/idle_thread.o: OS/idle_thread.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/idle_thread.c -o $(OS_DIR)/idle_thread.o
+	
+$(OS_DIR)/camera_thread.o: OS/camera_thread.c
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/camera_thread.c -o $(OS_DIR)/camera_thread.o
 
 LIB_FILES_STM32F4 := \
 	$(DRIVER_DIR)/stm32f4xx_ll_dma.o \
@@ -245,6 +277,15 @@ $(OUT_DIR)/target.elf: \
 	$(CAMERA_DIR)/camera.o \
 	$(LCD_DIR)/lcd.o \
 	$(LCD_DIR)/st7789.o \
+	$(OS_DIR)/tasks.o \
+	$(OS_DIR)/list.o \
+	$(OS_DIR)/queue.o \
+	$(OS_DIR)/heap_4.o \
+	$(OS_DIR)/port.o \
+	$(OS_DIR)/cmsis_os2.o \
+	$(OS_DIR)/idle_thread.o \
+	$(OS_DIR)/camera_thread.o \
+	$(OS_DIR)/timers.o \
 	$(LIB_DIR)/libhal.a \
 	$(LIB_DIR)/libstm32f4xx.a
 		@echo "$(ccblue)\nLinking$(ccend)"

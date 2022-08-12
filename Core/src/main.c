@@ -4,18 +4,19 @@
 
 /* Project includes */
 #include <main.h>
+#include <gpio.h>
 #include <spi.h>
 #include <usart.h>
-#include <gpio.h>
 
-#include <camera.h>
+#include <FreeRTOS.h>
+#include <cmsis_os.h>
+#include <task.h>
+
 #include <cm_backtrace.h>
-#include <timestamp.h>
 #include <fsmc_hal.h>
-#include <lcd.h>
 #include <platform.h>
 #include <printf.h>
-#include <st7789.h>
+#include <timestamp.h>
 #include <self_test.h>
 
 #define HARDWARE_VERSION               "v1.0.0"
@@ -23,14 +24,20 @@
 
 extern void fault_test_by_unalign(void);
 extern void fault_test_by_div0(void);
-extern uint16_t image[230*320*2];
 
-void SystemClock_Config(void);
+extern void StartIdleTask(void *argument);
+extern void StartCameraTask(void *argument);
+osThreadId_t idleTaskHandle;
+osThreadId_t cameraTaskHandle;
+extern const osThreadAttr_t idleTask_attributes;
+extern const osThreadAttr_t cameraTask_attributes;
 
 volatile bool CameraEndTransfer = false;
 volatile uint32_t VSyncCnt = 0;
 volatile uint32_t LineCnt = 0;
 volatile uint32_t FrameCnt = 0;
+
+void SystemClock_Config(void);
 
 int main(void)
 {
@@ -52,40 +59,18 @@ int main(void)
    /*fault_test_by_div0();*/
 
    Project_Info_Print();
-
-   ST7789_GPIO_Init();
-   Lcd_Start ();
    Platform_Read_Flash_Size();
    Self_Test_Run();
 
-   uint32_t i = 0;
-   uint32_t j = 0;
-   uint32_t offset = 0;
+   osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
 
-   Camera_Init();
-   Camera_Start();
+   idleTaskHandle = osThreadNew(StartIdleTask, NULL, &idleTask_attributes);
+   cameraTaskHandle  = osThreadNew(StartCameraTask, NULL, &cameraTask_attributes);
 
-   TS_Delay_ms(100);
-   ST7789_SetWindow(0, 0, DisplayWidth - 1, DisplayHeight - 1);
+   osKernelStart();    /* Start scheduler */
 
    while (1)
    {
-      for(i = 0; i < 57600/2; i++)
-      {
-         uint32_t data = *((uint32_t*)image + i + offset);
-         uint16_t data1 = (uint16_t)(data >> 16);
-         uint16_t data2 = (uint16_t)data;
-         ST7789_SetPixel((uint16_t)data1);
-         ST7789_SetPixel((uint16_t)data2);
-         j += 2;
-         if (j == 240)
-         {
-            offset += 40;
-            j = 0;
-         }
-      }
-      j = 0;
-      offset = 0;
    }
 }
 
@@ -130,23 +115,17 @@ void SystemClock_Config(void)
    LL_SetSystemCoreClock (168000000);
 }
 
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
 /**
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
 void Error_Handler(void)
 {
-/* USER CODE BEGIN Error_Handler_Debug */
 /* User can add his own implementation to report the HAL error return state */
    __disable_irq ();
    while (1)
    {
    }
-/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -159,10 +138,6 @@ void Error_Handler(void)
   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-/* USER CODE BEGIN 6 */
    printf ("Wrong parameters value: file %s on line %lu\r\n", file, line);
-/* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
