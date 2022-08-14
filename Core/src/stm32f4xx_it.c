@@ -61,10 +61,7 @@
 /* External variables --------------------------------------------------------*/
 
 /* USER CODE BEGIN EV */
-   extern volatile bool CameraEndTransfer;
-   extern volatile uint32_t VSyncCnt;
-   extern volatile uint32_t LineCnt;
-   extern volatile uint32_t FrameCnt;
+
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -174,29 +171,6 @@ void SysTick_Handler(void)
  #if (INCLUDE_xTaskGetSchedulerState == 1 )
    }
  #endif /* INCLUDE_xTaskGetSchedulerState */
-}
-
-void DCMI_IRQHandler(void)
-{
-   if(DCMI_GetITStatus(DCMI_IT_FRAME) == SET)
-   {
-      //Camera_Stop();
-      DCMI_ClearITPendingBit(DCMI_IT_FRAME);
-      CameraEndTransfer = true;
-      FrameCnt++;
-      VSyncCnt = 0;
-      LineCnt = 0;
-   }
-   if(DCMI_GetITStatus(DCMI_IT_VSYNC) == SET)
-   {
-      VSyncCnt++;
-      DCMI_ClearITPendingBit(DCMI_IT_VSYNC);
-   }
-   if(DCMI_GetITStatus(DCMI_IT_LINE) == SET)
-   {
-      LineCnt++;
-      DCMI_ClearITPendingBit(DCMI_IT_LINE);
-   }
 }
 
 void DMA2_Stream1_IRQHandler(void)

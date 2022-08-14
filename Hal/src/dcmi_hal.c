@@ -4,6 +4,8 @@
  *  Created on: Mar 30, 2022
  *      Author: mkpk
  */
+#include <stdbool.h>
+
 #include <dcmi_hal.h>
 
 #include <stm32f4xx_ll_bus.h>
@@ -37,6 +39,34 @@
 #define DCMI_VSYNC_GPIO_PORT   GPIOB
 #define DCMI_PIXCLK_GPIO_PIN   LL_GPIO_PIN_6
 #define DCMI_PIXCLK_GPIO_PORT  GPIOA
+
+volatile bool CameraEndTransfer;
+volatile uint32_t VSyncCnt;
+volatile uint32_t LineCnt;
+volatile uint32_t FrameCnt;
+
+void DCMI_IRQHandler(void)
+{
+   if(DCMI_GetITStatus(DCMI_IT_FRAME) == SET)
+   {
+      //Camera_Stop();
+      DCMI_ClearITPendingBit(DCMI_IT_FRAME);
+      CameraEndTransfer = true;
+      FrameCnt++;
+      VSyncCnt = 0;
+      LineCnt = 0;
+   }
+   if(DCMI_GetITStatus(DCMI_IT_VSYNC) == SET)
+   {
+      VSyncCnt++;
+      DCMI_ClearITPendingBit(DCMI_IT_VSYNC);
+   }
+   if(DCMI_GetITStatus(DCMI_IT_LINE) == SET)
+   {
+      LineCnt++;
+      DCMI_ClearITPendingBit(DCMI_IT_LINE);
+   }
+}
 
 void DCMI_Initialize(void)
 {

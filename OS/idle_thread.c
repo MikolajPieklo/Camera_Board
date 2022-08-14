@@ -15,7 +15,7 @@ void StartIdleTask(void *argument)
    for(;;)
    {
       LL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin);
-      osDelayUntil(200);
+      osDelay(200);
    }
    osDelay(1);
 }

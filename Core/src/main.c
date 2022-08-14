@@ -32,11 +32,6 @@ osThreadId_t cameraTaskHandle;
 extern const osThreadAttr_t idleTask_attributes;
 extern const osThreadAttr_t cameraTask_attributes;
 
-volatile bool CameraEndTransfer = false;
-volatile uint32_t VSyncCnt = 0;
-volatile uint32_t LineCnt = 0;
-volatile uint32_t FrameCnt = 0;
-
 void SystemClock_Config(void);
 
 int main(void)
