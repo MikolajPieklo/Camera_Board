@@ -33,9 +33,10 @@
 
 __attribute__((section(".EXTRAM")))uint16_t image[CAMERA_BUFFER];
 
-ErrorStatus ov7725_init(void);
+static void camera_gpio_init(void);
+static ErrorStatus ov7725_init(void);
 
-void Camera_GPIO_Init(void)
+static void camera_gpio_init(void)
 {
    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);
 
@@ -52,61 +53,7 @@ void Camera_GPIO_Init(void)
    LL_GPIO_ResetOutputPin    (CAMERA_PWDn_GPIO_Port, CAMERA_PWDn_PIN);
 }
 
-void Camera_Init(void)
-{
-   uint8_t rxdata[2];
-   Camera_GPIO_Init();
-   MCO1_Init();
-   I2C_Init();
-   DCMI_Initialize();
-
-   DMA_Init();
-   DCMI_Enable();
-
-   TS_Delay_ms(1);
-   Camera_Reset();
-
-   ov7725_init();
-
-   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_PID, false, rxdata, 2);
-   printf("PID: 0x%x%x\r\n", rxdata[0], rxdata[1]);
-
-   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_MIDH, false, rxdata, 2);
-   printf("MID: 0x%x%x\r\n", rxdata[0], rxdata[1]);
-
-   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_COM7, false, rxdata, 1);
-   printf("COM7: 0x%x\r\n", rxdata[0]);
-
-   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_HSTART, false, rxdata, 1);
-   printf("HSTART: 0x%x\r\n", rxdata[0]);
-};
-
-void Camera_Reset(void)
-{
-   uint8_t txdata = 0x80;
-   LL_GPIO_SetOutputPin(CAMERA_PWDn_GPIO_Port, CAMERA_PWDn_PIN);
-   LL_GPIO_ResetOutputPin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_PIN);
-   TS_Delay_ms(10);
-   LL_GPIO_SetOutputPin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_PIN);
-   LL_GPIO_ResetOutputPin    (CAMERA_PWDn_GPIO_Port, CAMERA_PWDn_PIN);
-   TS_Delay_ms(100);
-   I2C_Master_Transmit(OV7670_WRITE_ADDR, OV7725_R_COM7, false, &txdata, 1);
-   TS_Delay_ms(10);
-}
-
-void Camera_Start(void)
-{
-   DMA_EnableStream();
-   DCMI_Start();
-}
-
-void Camera_Stop(void)
-{
-   DCMI_Stop();
-   DMA_DisableStream();
-}
-
-ErrorStatus ov7725_init(void)
+static ErrorStatus ov7725_init(void)
 {
    I2C_Master_Transmit_Byte(OV7670_WRITE_ADDR, OV7725_R_COM7 , 0x80);//Reset Registers
    TS_Delay_ms(10);
@@ -139,4 +86,60 @@ ErrorStatus ov7725_init(void)
 //   I2C_Master_Transmit_Byte(OV7670_WRITE_ADDR, OV7725_R_DSP_Ctrl4, 0b00000001);
 
    return SUCCESS;
+}
+
+void Camera_Init(void)
+{
+   uint8_t rxdata[2];
+   camera_gpio_init();
+   MCO1_Init();
+   I2C_Init();
+   DCMI_Initialize();
+
+   DMA_Init();
+   DCMI_Enable();
+
+   TS_Delay_ms(1);
+   Camera_Reset();
+
+   ov7725_init();
+
+   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_PID, false, rxdata, 2);
+   printf("PID: 0x%x%x\r\n", rxdata[0], rxdata[1]);
+
+   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_MIDH, false, rxdata, 2);
+   printf("MID: 0x%x%x\r\n", rxdata[0], rxdata[1]);
+
+   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_COM7, false, rxdata, 1);
+   printf("COM7: 0x%x\r\n", rxdata[0]);
+
+   I2C_Master_Recesive(OV7670_WRITE_ADDR, OV7725_R_HSTART, false, rxdata, 1);
+   printf("HSTART: 0x%x\r\n", rxdata[0]);
+};
+
+void Camera_Reset(void)
+{
+   uint8_t txdata = 0x80;
+   LL_GPIO_SetOutputPin(CAMERA_PWDn_GPIO_Port, CAMERA_PWDn_PIN);
+   LL_GPIO_ResetOutputPin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_PIN);
+   TS_Delay_ms(10);
+
+   LL_GPIO_SetOutputPin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_PIN);
+   LL_GPIO_ResetOutputPin(CAMERA_PWDn_GPIO_Port, CAMERA_PWDn_PIN);
+   TS_Delay_ms(100);
+
+   I2C_Master_Transmit(OV7670_WRITE_ADDR, OV7725_R_COM7, false, &txdata, 1);
+   TS_Delay_ms(10);
+}
+
+void Camera_Start(void)
+{
+   DMA_EnableStream();
+   DCMI_Start();
+}
+
+void Camera_Stop(void)
+{
+   DCMI_Stop();
+   DMA_DisableStream();
 }

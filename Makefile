@@ -9,9 +9,11 @@ include makefiles/makefile_dir.mk
 
 NAME := $(OUT_DIR)/TARGET
 MACH := cortex-m4
+FLOAT_ABI := hard
+FPU := fpv4-sp-d16
 MAP  := -Wl,-Map=$(NAME).map  # Create map file
 GC   := -Wl,--gc-sections     # Link for code size
-DEBUGINFO := #-DDEBUG -g3
+DEBUGINFO := -DDEBUG -g3
 
 # Use newlib.
 USE_NOSYS    :=--specs=nosys.specs
@@ -22,8 +24,8 @@ CFLAGS := \
 	-c \
 	-mcpu=$(MACH) \
 	-mthumb \
-	-mfloat-abi=hard \
-	-mfpu=fpv4-sp-d16 \
+	-mfloat-abi=$(FLOAT_ABI) \
+	-mfpu=$(FPU) \
 	-std=gnu11 \
 	-O0 \
 	-DSTM32F407xx \
@@ -40,8 +42,8 @@ CFLAGS := \
 LDFLAGS := \
 	-mcpu=$(MACH) \
 	-mthumb \
-	-mfloat-abi=hard \
-	-mfpu=fpv4-sp-d16 \
+	-mfloat-abi=$(FLOAT_ABI) \
+	-mfpu=$(FPU) \
 	-T"STM32F407ZGTX_FLASH.ld" \
 	$(MAP) \
 	$(GC) \
@@ -200,6 +202,9 @@ $(LCD_DIR)/lcd.o: Lcd/src/lcd.c Lcd/inc/lcd.h
 $(LCD_DIR)/st7789.o: Lcd/src/st7789.c Lcd/inc/st7789.h
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/src/st7789.c -o $(LCD_DIR)/st7789.o
 	
+$(LCD_DIR)/ili9341.o: Lcd/src/ili9341.c Lcd/inc/ili9341.h Lcd/inc/FONT.h
+	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) Lcd/src/ili9341.c -o $(LCD_DIR)/ili9341.o
+	
 $(OS_DIR)/tasks.o: OS/src/tasks.c
 	$(CC) $(CFLAGS) $(CONST) $(DEBUGINFO) $(INC) OS/src/tasks.c -o $(OS_DIR)/tasks.o
 	
@@ -277,6 +282,7 @@ $(OUT_DIR)/target.elf: \
 	$(CAMERA_DIR)/camera.o \
 	$(LCD_DIR)/lcd.o \
 	$(LCD_DIR)/st7789.o \
+	$(LCD_DIR)/ili9341.o \
 	$(OS_DIR)/tasks.o \
 	$(OS_DIR)/list.o \
 	$(OS_DIR)/queue.o \

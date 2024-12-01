@@ -18,6 +18,7 @@
 #include <printf.h>
 #include <timestamp.h>
 #include <self_test.h>
+#include <ili9341.h>
 
 #define HARDWARE_VERSION               "v1.0.0"
 #define SOFTWARE_VERSION               "v0.2.1"
@@ -48,7 +49,34 @@ int main(void)
    MX_SPI1_Init();
    TS_Init_ms();
    LL_SYSTICK_EnableIT();
-   SRAM_FSMC_Init();
+   FSMC_Init();
+   fsmc_lcd_init();
+//   LCD_Fill(0, 0, 239, 2, 0xFFFF);
+//   TS_Delay_ms(1000);
+//   LCD_Fill(0, 0, 239, 4, 0xFFFF);
+//   TS_Delay_ms(1000);
+//   LCD_Fill(0, 0, 239, 6, 0xFFFF);
+//   TS_Delay_ms(1000);
+//   LCD_Fill(0, 0, 320, 125, 0xFFF0);
+//   TS_Delay_ms(1000);
+//   LCD_Fill(0, 0, 320, 125, 0xFF00);
+//   TS_Delay_ms(1000);
+//   LCD_Fill(0, 0, 320, 125, 0xF000);
+//   TS_Delay_ms(1000);
+   LCD_Draw_Circle_ili(160, 125, 50);
+//   LCD_ShowChar(100, 100, 'O', 24, 0);
+//   LCD_ShowChar(130, 100, 'O', 24, 0);
+   LCD_ShowString(70, 140, 110, 160, 24, "elo");
+   LCD_ShowNum(30, 30, 10, 2, 24);
+   LCD_ShowxNum(100, 100, 25, 2, 24, 0x80);
+   LCD_ShowxNum(125, 125, 25, 2, 24, 0x00);
+   uint16_t pBuffer[4];
+   FSMC_Write_u16(Bank1_SRAM4_ADDR, 0x04, 0);
+   FSMC_Read_u16(Bank1_SRAM4_ADDR, pBuffer+0, 0);
+   FSMC_Read_u16(Bank1_SRAM4_ADDR, pBuffer+1, 0);
+   FSMC_Read_u16(Bank1_SRAM4_ADDR, pBuffer+2, 0);
+   FSMC_Read_u16(Bank1_SRAM4_ADDR, pBuffer+3, 0);
+   //FSMC_Read_Buffer_u16(Bank1_SRAM4_ADDR, pBuffer, 0, 4);
 
    cm_backtrace_init("CmBacktrace", HARDWARE_VERSION, SOFTWARE_VERSION);
    /*fault_test_by_div0();*/
@@ -60,7 +88,7 @@ int main(void)
    osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
 
    idleTaskHandle = osThreadNew(StartIdleTask, NULL, &idleTask_attributes);
-   cameraTaskHandle  = osThreadNew(StartCameraTask, NULL, &cameraTask_attributes);
+   //cameraTaskHandle  = osThreadNew(StartCameraTask, NULL, &cameraTask_attributes);
 
    osKernelStart();    /* Start scheduler */
 

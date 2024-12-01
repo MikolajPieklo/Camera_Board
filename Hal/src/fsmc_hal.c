@@ -16,8 +16,6 @@
 
 #include <timestamp.h>
 
-#define Bank1_SRAM3_ADDR    ((uint32_t)(0x68000000))
-
 #define FSMC_D0_GPIO_PIN         LL_GPIO_PIN_14 //PD14
 #define FSMC_D0_GPIO_PORT        GPIOD
 #define FSMC_D1_GPIO_PIN         LL_GPIO_PIN_15 //PD11
@@ -98,14 +96,16 @@
 #define FSMC_NBL0_GPIO_PORT      GPIOE
 #define FSMC_NBL1_GPIO_PIN       LL_GPIO_PIN_1  //PE1
 #define FSMC_NBL1_GPIO_PORT      GPIOE
-#define FSMC_NE3_GPIO_PIN        LL_GPIO_PIN_10 //PG10
+#define FSMC_NE3_GPIO_PIN        LL_GPIO_PIN_10 //PG10 -> SRAM
 #define FSMC_NE3_GPIO_PORT       GPIOG
+#define FSMC_NE4_GPIO_PIN        LL_GPIO_PIN_12 //PG12 -> LCD
+#define FSMC_NE4_GPIO_PORT       GPIOG
 
-void SRAM_FSMC_Init(void)
+void FSMC_Init(void)
 {
    LL_GPIO_InitTypeDef GPIO_InitStruct;
-   FSMC_NORSRAMInitTypeDef  FSMC_NORSRAMInitStructure;
-   FSMC_NORSRAMTimingInitTypeDef  readWriteTiming;
+   FSMC_NORSRAMInitTypeDef FSMC_NORSRAMInitStructure;
+   FSMC_NORSRAMTimingInitTypeDef readWriteTiming;
 
    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOD);
    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOE);
@@ -182,7 +182,8 @@ void SRAM_FSMC_Init(void)
             FSMC_A13_GPIO_PIN |
             FSMC_A14_GPIO_PIN |
             FSMC_A15_GPIO_PIN |
-            FSMC_NE3_GPIO_PIN;
+            FSMC_NE3_GPIO_PIN |
+            FSMC_NE4_GPIO_PIN;
    GPIO_InitStruct.Mode       = LL_GPIO_MODE_ALTERNATE;
    GPIO_InitStruct.Speed      = LL_GPIO_SPEED_FREQ_VERY_HIGH;
    GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -215,47 +216,99 @@ void SRAM_FSMC_Init(void)
    FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &readWriteTiming;
 
    FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
-
    FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM3, ENABLE);
 
-   TS_Delay_ms(100);
+   //LCD
+   readWriteTiming.FSMC_AddressSetupTime = 4;
+   readWriteTiming.FSMC_AddressHoldTime = 15;
+   readWriteTiming.FSMC_DataSetupTime = 8;
+   readWriteTiming.FSMC_BusTurnAroundDuration = 4;
+   readWriteTiming.FSMC_CLKDivision = 16;
+   readWriteTiming.FSMC_DataLatency = 17;
+   readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;
+
+//   readWriteTiming.FSMC_AddressSetupTime = 0x00;
+//   readWriteTiming.FSMC_AddressHoldTime = 0x00;
+//   readWriteTiming.FSMC_DataSetupTime = 0x08;
+//   readWriteTiming.FSMC_BusTurnAroundDuration = 0x00;
+//   readWriteTiming.FSMC_CLKDivision = 0x00;
+//   readWriteTiming.FSMC_DataLatency = 0x00;
+//   readWriteTiming.FSMC_AccessMode = FSMC_AccessMode_A;
+
+   FSMC_NORSRAMInitStructure.FSMC_Bank = FSMC_Bank1_NORSRAM4;
+   FSMC_NORSRAMInitStructure.FSMC_DataAddressMux = FSMC_DataAddressMux_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_MemoryType =FSMC_MemoryType_SRAM;
+   FSMC_NORSRAMInitStructure.FSMC_MemoryDataWidth = FSMC_MemoryDataWidth_16b;
+   FSMC_NORSRAMInitStructure.FSMC_BurstAccessMode =FSMC_BurstAccessMode_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_WaitSignalPolarity = FSMC_WaitSignalPolarity_Low;
+   FSMC_NORSRAMInitStructure.FSMC_AsynchronousWait=FSMC_AsynchronousWait_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_WrapMode = FSMC_WrapMode_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_WaitSignalActive = FSMC_WaitSignalActive_BeforeWaitState;
+   FSMC_NORSRAMInitStructure.FSMC_WriteOperation = FSMC_WriteOperation_Enable;
+   FSMC_NORSRAMInitStructure.FSMC_WaitSignal = FSMC_WaitSignal_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_ExtendedMode = FSMC_ExtendedMode_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_WriteBurst = FSMC_WriteBurst_Disable;
+   FSMC_NORSRAMInitStructure.FSMC_ReadWriteTimingStruct = &readWriteTiming;
+   FSMC_NORSRAMInitStructure.FSMC_WriteTimingStruct = &readWriteTiming;
+
+   FSMC_NORSRAMInit(&FSMC_NORSRAMInitStructure);
+   FSMC_NORSRAMCmd(FSMC_Bank1_NORSRAM4, ENABLE);
+
+   TS_Delay_ms(10);
 }
 
-void SRAM_Write_Buffer_u8(uint8_t* pBuffer, uint32_t WriteAddr, uint32_t n)
+void FSMC_Write_u8 (uint32_t bank, uint8_t data, uint32_t writeAddr)
+{
+   *(volatile uint8_t*) (bank + writeAddr) = data;
+}
+void FSMC_Read_u8 (uint32_t bank, uint8_t* data, uint32_t readAddr)
+{
+   *data = *(volatile uint8_t*) (bank + readAddr);
+}
+void FSMC_Write_u16 (uint32_t bank, uint16_t data, uint32_t writeAddr)
+{
+   *(volatile uint16_t*) (bank + (2 * writeAddr)) = data;
+}
+void FSMC_Read_u16 (uint32_t bank, uint16_t* data, uint32_t readAddr)
+{
+   *data  = *(volatile uint16_t*) (bank + (2 * readAddr));
+}
+
+void FSMC_Write_Buffer_u8(uint32_t bank, uint8_t* pBuffer, uint32_t writeAddr, uint32_t n)
 {
    for (; n != 0; n--)
    {
-      *(volatile uint8_t*) (Bank1_SRAM3_ADDR + WriteAddr) = *pBuffer;
-      WriteAddr++;
+      *(volatile uint8_t*) (bank + writeAddr) = *pBuffer;
+      writeAddr++;
       pBuffer++;
    }
 }
 
-void SRAM_Read_Buffer_u8(uint8_t* pBuffer, uint32_t ReadAddr, uint32_t n)
+void FSMC_Read_Buffer_u8(uint32_t bank, uint8_t* pBuffer, uint32_t readAddr, uint32_t n)
 {
    for (; n != 0; n--)
    {
-      *pBuffer++ = *(volatile uint8_t*) (Bank1_SRAM3_ADDR + ReadAddr);
-      ReadAddr++;
+      *pBuffer++ = *(volatile uint8_t*) (bank + readAddr);
+      readAddr++;
    }
 }
 
-void SRAM_Write_Buffer_u16(uint16_t* pBuffer, uint32_t WriteAddr, uint32_t n)
+void FSMC_Write_Buffer_u16(uint32_t bank, uint16_t* pBuffer, uint32_t writeAddr, uint32_t n)
 {
    for (; n != 0; n--)
    {
-      *(volatile uint16_t*) (Bank1_SRAM3_ADDR + (2*WriteAddr)) = *pBuffer;
-      WriteAddr++;
+      *(volatile uint16_t*) (bank + (2 * writeAddr)) = *pBuffer;
+      writeAddr++;
       pBuffer++;
    }
 }
 
-void SRAM_Read_Buffer_u16(uint16_t* pBuffer, uint32_t ReadAddr, uint32_t n)
+void FSMC_Read_Buffer_u16(uint32_t bank, uint16_t* pBuffer, uint32_t readAddr, uint32_t n)
 {
    for (; n != 0; n--)
    {
-      *pBuffer++  = *(volatile uint16_t*) (Bank1_SRAM3_ADDR + (2 * ReadAddr));
-      ReadAddr++;
+      *pBuffer++  = *(volatile uint16_t*) (bank + (2 * readAddr));
+      readAddr++;
    }
 }
 

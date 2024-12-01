@@ -40,31 +40,50 @@
 #define DCMI_PIXCLK_GPIO_PIN   LL_GPIO_PIN_6
 #define DCMI_PIXCLK_GPIO_PORT  GPIOA
 
+#ifdef DEBUG
 volatile bool CameraEndTransfer;
 volatile uint32_t VSyncCnt;
 volatile uint32_t LineCnt;
 volatile uint32_t FrameCnt;
+#endif
 
 void DCMI_IRQHandler(void)
 {
-   if(DCMI_GetITStatus(DCMI_IT_FRAME) == SET)
+   if(SET == DCMI_GetITStatus(DCMI_IT_FRAME))
    {
-      //Camera_Stop();
       DCMI_ClearITPendingBit(DCMI_IT_FRAME);
+      DCMI_Start();
+#ifdef DEBUG
       CameraEndTransfer = true;
       FrameCnt++;
       VSyncCnt = 0;
       LineCnt = 0;
+#endif
    }
-   if(DCMI_GetITStatus(DCMI_IT_VSYNC) == SET)
+
+   if(SET == DCMI_GetITStatus(DCMI_IT_OVF))
    {
-      VSyncCnt++;
+      DCMI_ClearITPendingBit(DCMI_IT_OVF);
+   }
+
+   if(SET == DCMI_GetITStatus(DCMI_IT_ERR))
+   {
+      DCMI_ClearITPendingBit(DCMI_IT_ERR);
+   }
+
+   if(SET == DCMI_GetITStatus(DCMI_IT_VSYNC))
+   {
       DCMI_ClearITPendingBit(DCMI_IT_VSYNC);
+#ifdef DEBUG
+      VSyncCnt++;
+#endif
    }
-   if(DCMI_GetITStatus(DCMI_IT_LINE) == SET)
+   if(SET == DCMI_GetITStatus(DCMI_IT_LINE))
    {
-      LineCnt++;
       DCMI_ClearITPendingBit(DCMI_IT_LINE);
+#ifdef DEBUG
+      LineCnt++;
+#endif
    }
 }
 
@@ -156,7 +175,7 @@ void DCMI_Initialize(void)
 
    DCMI_DeInit();
 
-   DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_Continuous;
+   DCMI_InitStructure.DCMI_CaptureMode = DCMI_CaptureMode_SnapShot;
    DCMI_InitStructure.DCMI_CaptureRate = DCMI_CaptureRate_All_Frame;
    DCMI_InitStructure.DCMI_ExtendedDataMode = DCMI_ExtendedDataMode_8b;
    DCMI_InitStructure.DCMI_PCKPolarity = DCMI_PCKPolarity_Rising;         //PCLK
@@ -168,8 +187,10 @@ void DCMI_Initialize(void)
 
    __NVIC_EnableIRQ (DCMI_IRQn);
    DCMI_ITConfig (DCMI_IT_FRAME, ENABLE);
+   DCMI_ITConfig (DCMI_IT_OVF,   ENABLE);
+   DCMI_ITConfig (DCMI_IT_ERR,   ENABLE);
    DCMI_ITConfig (DCMI_IT_VSYNC, ENABLE);
-   DCMI_ITConfig (DCMI_IT_LINE, ENABLE);
+   DCMI_ITConfig (DCMI_IT_LINE,  ENABLE);
 }
 
 void DCMI_Enable(void)
